@@ -1,4 +1,4 @@
-export default [
+let userList = [
     {
         id: 1,
         firstName: 'Kevin',
@@ -15,3 +15,5 @@ export default [
         lastName: 'Billette'
     }
 ];
+
+export {userList};
