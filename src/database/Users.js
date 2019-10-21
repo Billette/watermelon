@@ -13,7 +13,7 @@ let userList = [
         lastName: 'Messedi',
         email: 'amir.messedi@edu.ece.fr',
         password: 'amirBG75',
-        isAdmin: true
+        isAdmin: true 
     },
     {
         id: 3,
