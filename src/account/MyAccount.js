@@ -12,10 +12,10 @@ class MyAccount extends Component {
         super(props);
 
         // For tests only
-        localStorage.setItem("idUser", "2");
+        sessionStorage.setItem("idUser", "2");
 
         this.state = {
-            idUser: localStorage.getItem('idUser'),
+            idUser: sessionStorage.getItem('idUser'),
         }
 
         this.myUser = request.getUserByID(this.state.idUser);
