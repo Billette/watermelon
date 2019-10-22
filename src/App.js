@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
-import ConnectionUser from './connection/ConnectionUser.js';
+import MyAccount from './test/MyAccount.js';
 
 function App() {
   return (
 
     <div>
-      <ConnectionUser/>
+      <MyAccount />
     </div>
   );
 }

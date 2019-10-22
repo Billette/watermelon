@@ -1,49 +1,56 @@
-import React from 'react';
+//import React from 'react';
 import {userList} from './Users.js';
 import {creditCards} from './CreditCards.js';
 
 
 const request = {
 
-    getUsers: function(){
-        var users = userList.map((user) => {
-            return (
-                <li key={`${user.id}`}>
-                    {user.id} - {user.firstName} - {user.lastName}
-                </li>
-            );
+    getUsers: function(idUser){
+        var myUsers = [];
+        userList.map((user) => {
+            if(user.id === parseInt(idUser, 10)){
+                myUsers.push(user);
+            }
+            return myUsers; 
         });
 
-        return users;
+        return myUsers;
+    },
+
+    getUserByID: function(idUser){
+        var myUser = [];
+        userList.map((user) => {
+            if(user.id === parseInt(idUser, 10)){
+                myUser.push(user);
+            }
+            return myUser; 
+        });
+
+        return myUser;
     },
 
     getCreditCards : function(){
-        var cards = creditCards.map((card) => {
-            return (
-                <li key={`${card.id}`}>
-                    {card.id} - {card.idUser} - {card.brand} - {card.expireAt}
-                </li>
-            );
+        var myCards = [];
+        creditCards.map((card) => {
+            myCards.push(card);
+            return myCards; 
         });
 
-        return cards;
+        return myCards;
     },
 
-    getCreditCardsOfUser : function(idUser){
-        var cardsOfUser = creditCards.map((card) => {
-            if(card.idUser === idUser){
-                return (
-                    <li key={`${card.id}`}>
-                        {card.id} - {card.idUser} - {card.brand} - {card.expireAt}
-                    </li>
-                );
-            } else {
-                return null;
+    getCreditCardsOfUser: function(idUser){
+        var myCards = [];
+        creditCards.map((card) => {
+            if(card.idUser === parseInt(idUser, 10)){
+                myCards.push(card);
             }
+            return myCards; 
         });
 
-        return cardsOfUser;
-    }
+        return myCards;
+    },
+
 }
 
 export default request;
