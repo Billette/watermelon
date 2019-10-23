@@ -2,29 +2,27 @@ import React, {Component} from 'react';
 import './App.css';
 import MyAccount from './account/MyAccount.js';
 import {creditCards} from './database/CreditCards.js';
+import {userList} from './database/Users.js';
 
 
 
 class App extends Component {
 
   constructor(props){
+    
     super(props);
 
+    sessionStorage.clear();
 
-    creditCards.map((card) => {
-      var cardID = 'CardID';
-      cardID = cardID.concat('',card.id);
-      sessionStorage.setItem(cardID, JSON.stringify(card));
-
-      return null; 
-    });
-
-  }
-
-
-  componentDidUpdate(){
+    var usersKey = 'Users';
+    var cardsKey = 'Cards';
+    
+    // Buiding up the pseudo-database on the session storage
+    sessionStorage.setItem(usersKey, JSON.stringify(userList));
+    sessionStorage.setItem(cardsKey, JSON.stringify(creditCards));
 
   }
+
 
   render () {
     return (

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import request from '../database/Request.js';
+import MyCard from './MyCard.js';
+import AddCard from './AddCard.js';
 
 class MyCreditCards extends Component {
 
@@ -7,47 +9,50 @@ class MyCreditCards extends Component {
         super(props);
         this.state = {
             idUser: this.props.idUser,
+            myUser: [],
+            myCards: [],
         }
 
-        this.myUser = request.getUserByID(this.state.idUser);
-        this.myCards = request.getCreditCardsOfUser(this.state.idUser);
-        //console.log(this.myCards);
+        this.handleToUpdate = this.handleToUpdate.bind(this);
     }
 
-    componentDidUpdate() {
-        this.myUser = request.getUserByID(this.state.idUser);
-        this.myCards = request.getCreditCardsOfUser(this.state.idUser);
+    
+    componentDidMount() {
+        this.setState({
+            myUser: request.getUserByID(this.state.idUser),
+            myCards: request.getCreditCardsOfUser(this.state.idUser)
+        })  
+    }   
+
+    //Refresh the cards of the user when a modification is made
+    handleToUpdate(){
+        this.setState({
+            myCards: request.getCreditCardsOfUser(this.state.idUser)
+        })
     }
 
-    listCards(){
-        var listCards = this.myCards.map( (card) => {
-            //console.log(card);
+    // Dispay for all cards its details and buttons to remove, modify, payin and payout
+    displayListCards(){
+        var handleToUpdate  = this.handleToUpdate.bind(this);
+
+        var listCards = this.state.myCards.map( (card) => {
             return(
-                <li key={`${card.id}`}> ID: {card.id} - Marque: {card.brand} - 4 derniers chiffres: {card.lastFour}
-                 - Expire le: {card.expireAt} </li>
+                <MyCard key={card.id} id={card.id} handleToUpdate={handleToUpdate.bind(this)}/>
             );
         });
 
         return(<div className='listCards'> <ul> {listCards} </ul> </div>);
     }
 
-    removeCard(idCard){
-        var cardID = 'CardID';
-        cardID = cardID.concat('',idCard);
-
-        var cardToRemove = JSON.parse(sessionStorage.getItem(cardID));
-
-        console.log(cardToRemove);
-
-        sessionStorage.removeItem(cardID);
-
-    }
-
     render(){
+        var handleToUpdate  = this.handleToUpdate.bind(this);
+
+        console.log("MyCreditCard: myCards");
+
         return(
             <div className='MyCreditCards'>
-                Vos cartes de crédit : {this.listCards()}
-                <button onClick={ () => this.removeCard(5)}>  Supprimer la carte </button>
+                Vos cartes de crédit : {this.displayListCards()} 
+                <AddCard idUser={this.state.idUser} handleToUpdate={handleToUpdate.bind(this)}/>
             </div>
         )
     }

@@ -1,13 +1,15 @@
 //import React from 'react';
-import {userList} from './Users.js';
-import {creditCards} from './CreditCards.js';
+//import {userList} from './Users.js';
+//import {creditCards} from './CreditCards.js';
 
 
 const request = {
 
     getUsers: function(idUser){
         var myUsers = [];
-        userList.map((user) => {
+        var usersKey = 'Users';
+        var users = JSON.parse(sessionStorage.getItem(usersKey));
+        users.map((user) => {
             if(user.id === parseInt(idUser, 10)){
                 myUsers.push(user);
             }
@@ -19,7 +21,9 @@ const request = {
 
     getUserByID: function(idUser){
         var myUser = [];
-        userList.map((user) => {
+        var usersKey = 'Users';
+        var users = JSON.parse(sessionStorage.getItem(usersKey));
+        users.map((user) => {
             if(user.id === parseInt(idUser, 10)){
                 myUser.push(user);
             }
@@ -31,6 +35,9 @@ const request = {
 
     getCreditCards : function(){
         var myCards = [];
+        var cardsKey = 'Cards';
+        var creditCards = JSON.parse(sessionStorage.getItem(cardsKey));
+ 
         creditCards.map((card) => {
             myCards.push(card);
             return myCards; 
@@ -39,8 +46,25 @@ const request = {
         return myCards;
     },
 
+    getCreditCardByID: function(idCard){
+        var myCards = [];
+        var cardsKey = 'Cards';
+        var cards = JSON.parse(sessionStorage.getItem(cardsKey));
+        cards.map((card) => {
+            if(card.id === parseInt(idCard, 10)){
+                myCards.push(card);
+            }
+            return myCards; 
+        });
+
+        return myCards;
+    },
+
     getCreditCardsOfUser: function(idUser){
         var myCards = [];
+        var cardsKey = 'Cards';
+        var creditCards = JSON.parse(sessionStorage.getItem(cardsKey));
+
         creditCards.map((card) => {
             if(card.idUser === parseInt(idUser, 10)){
                 myCards.push(card);
@@ -50,6 +74,13 @@ const request = {
 
         return myCards;
     },
+    
+    // Find a suitable ID for an array of object
+    IDAutoIncrement: function(array){
+        return (Math.max.apply(Math, array.map(function(object) { 
+            return (object.id); 
+        })) + 1)
+    }    
 
 }
 
