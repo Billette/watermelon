@@ -14,15 +14,7 @@ class AddCard extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleToUpdate = this.props.handleToUpdate;
-    }
-
-    /*
-    componentDidMount() {
-        this.setState({
-
-        })
-    } */
-        
+    } 
 
     handleChange(event) {
         this.setState({ [event.target.name]: event.target.value });
@@ -31,7 +23,7 @@ class AddCard extends Component {
     addCard(){
         var cardsKey = 'Cards';
 
-        var cards = JSON.parse(sessionStorage.getItem(cardsKey));
+        var cards = request.getCreditCards();
 
         var isToCreate = true;
 
@@ -74,16 +66,12 @@ class AddCard extends Component {
         // If the new card has all its values settled
         if(isToCreate === true) {
             cards.push(newCard);
-
-            console.log(newCard);
     
-            sessionStorage.removeItem(cardsKey);
             sessionStorage.setItem(cardsKey, JSON.stringify(cards));
-    
-            cards = JSON.parse(sessionStorage.getItem(cardsKey));
-    
+        
         } else {
             console.log("champs manquants");
+            return(<div className="Error"></div>)
 
         }
 

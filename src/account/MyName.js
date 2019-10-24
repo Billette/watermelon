@@ -8,19 +8,20 @@ class MyName extends Component {
         super(props);
         this.state = {
             idUser: this.props.idUser,
+            myUser: {},
         }
-
-        this.myUser = request.getUserByID(this.state.idUser);
     }
 
-    componentDidUpdate() {
-        this.myUser = request.getUserByID(this.state.idUser);
+    componentDidMount(){
+        this.setState({
+            myUser: request.getUserByID(this.state.idUser)[0],
+        });
     }
 
     render(){
         return(
             <div className='MyName'>
-                <div> Votre compte : {this.myUser[0].firstName} - {this.myUser[0].lastName} - {this.myUser[0].email}</div>
+                <div> Votre compte : {this.state.myUser.firstName} - {this.state.myUser.lastName} - {this.state.myUser.email}</div>
             </div>
         )
     }

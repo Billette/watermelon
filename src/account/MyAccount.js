@@ -19,6 +19,7 @@ class MyAccount extends Component {
         }
 
         this.myUser = request.getUserByID(this.state.idUser);
+        
     }
 
     render(){

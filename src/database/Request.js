@@ -5,14 +5,13 @@
 
 const request = {
 
-    getUsers: function(idUser){
+    getUsers: function(){
         var myUsers = [];
         var usersKey = 'Users';
         var users = JSON.parse(sessionStorage.getItem(usersKey));
         users.map((user) => {
-            if(user.id === parseInt(idUser, 10)){
-                myUsers.push(user);
-            }
+
+            myUsers.push(user);
             return myUsers; 
         });
 
@@ -73,6 +72,48 @@ const request = {
         });
 
         return myCards;
+    },
+
+    getWallets: function(){
+        var myWallet = [];
+        var walletsKey = 'Wallets';
+        var wallets = JSON.parse(sessionStorage.getItem(walletsKey));
+        wallets.map((wallet) => {
+
+            myWallet.push(wallet);
+            return myWallet; 
+        });
+
+        return myWallet;
+    },
+
+    getWalletByID: function(idWallet){
+        var myWallet = [];
+        var walletsKey = 'Wallets';
+        var wallets = JSON.parse(sessionStorage.getItem(walletsKey));
+        wallets.map((wallet) => {
+            if(wallet.id === parseInt(idWallet, 10)){
+                myWallet.push(wallet);
+            }
+            return myWallet; 
+        });
+
+        return myWallet;
+    },
+
+    getWalletOfUser: function(idUser){
+        var myWallet = [];
+        var walletsKey = 'Wallets';
+        var wallets = JSON.parse(sessionStorage.getItem(walletsKey));
+
+        wallets.map((wallet) => {
+            if(wallet.idUser === parseInt(idUser, 10)){
+                myWallet.push(wallet);
+            }
+            return myWallet; 
+        });
+
+        return myWallet;
     },
     
     // Find a suitable ID for an array of object

@@ -9,7 +9,7 @@ class MyCreditCards extends Component {
         super(props);
         this.state = {
             idUser: this.props.idUser,
-            myUser: [],
+            myUser: {},
             myCards: [],
         }
 
@@ -19,9 +19,10 @@ class MyCreditCards extends Component {
     
     componentDidMount() {
         this.setState({
-            myUser: request.getUserByID(this.state.idUser),
-            myCards: request.getCreditCardsOfUser(this.state.idUser)
+            myUser: request.getUserByID(this.state.idUser)[0],
+            myCards: request.getCreditCardsOfUser(this.state.idUser),
         })  
+
     }   
 
     //Refresh the cards of the user when a modification is made
@@ -41,13 +42,11 @@ class MyCreditCards extends Component {
             );
         });
 
-        return(<div className='listCards'> <ul> {listCards} </ul> </div>);
+        return(<div className='listCards'>  {listCards} </div>);
     }
 
     render(){
         var handleToUpdate  = this.handleToUpdate.bind(this);
-
-        console.log("MyCreditCard: myCards");
 
         return(
             <div className='MyCreditCards'>
