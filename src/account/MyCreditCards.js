@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import request from '../database/Request.js';
 import MyCard from './MyCard.js';
 import AddCard from './AddCard.js';
+//import request from '../database/Request.js';
 
 class MyCreditCards extends Component {
 
@@ -9,26 +9,19 @@ class MyCreditCards extends Component {
         super(props);
         this.state = {
             idUser: this.props.idUser,
-            myUser: [],
-            myCards: [],
+            myCards: this.props.myCards,
         }
 
-        this.handleToUpdate = this.handleToUpdate.bind(this);
+        this.handleToUpdate = this.props.handleToUpdate;
     }
 
-    
-    componentDidMount() {
-        this.setState({
-            myUser: request.getUserByID(this.state.idUser),
-            myCards: request.getCreditCardsOfUser(this.state.idUser)
-        })  
-    }   
 
-    //Refresh the cards of the user when a modification is made
-    handleToUpdate(){
-        this.setState({
-            myCards: request.getCreditCardsOfUser(this.state.idUser)
-        })
+    static getDerivedStateFromProps(nextProps, prevState) {
+
+        return {
+            idUser: nextProps.idUser,
+            myCards: nextProps.myCards,
+        }
     }
 
     // Dispay for all cards its details and buttons to remove, modify, payin and payout
@@ -37,21 +30,21 @@ class MyCreditCards extends Component {
 
         var listCards = this.state.myCards.map( (card) => {
             return(
-                <MyCard key={card.id} id={card.id} handleToUpdate={handleToUpdate.bind(this)}/>
+                <MyCard key={card.id} id={card.id} handleToUpdate={handleToUpdate.bind(this)} 
+                myCards={this.state.myCards}/>
             );
         });
 
-        return(<div className='listCards'> <ul> {listCards} </ul> </div>);
+        return(<div className='listCards'>  {listCards} </div>);
     }
 
     render(){
         var handleToUpdate  = this.handleToUpdate.bind(this);
 
-        console.log("MyCreditCard: myCards");
-
         return(
             <div className='MyCreditCards'>
-                Vos cartes de crédit : {this.displayListCards()} 
+                <h2> Vos cartes de crédit </h2>
+                 {this.displayListCards()} 
                 <AddCard idUser={this.state.idUser} handleToUpdate={handleToUpdate.bind(this)}/>
             </div>
         )

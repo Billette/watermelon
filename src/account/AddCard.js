@@ -14,15 +14,7 @@ class AddCard extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleToUpdate = this.props.handleToUpdate;
-    }
-
-    /*
-    componentDidMount() {
-        this.setState({
-
-        })
-    } */
-        
+    } 
 
     handleChange(event) {
         this.setState({ [event.target.name]: event.target.value });
@@ -31,7 +23,7 @@ class AddCard extends Component {
     addCard(){
         var cardsKey = 'Cards';
 
-        var cards = JSON.parse(sessionStorage.getItem(cardsKey));
+        var cards = request.getCreditCards();
 
         var isToCreate = true;
 
@@ -61,8 +53,6 @@ class AddCard extends Component {
             isToCreate = false;
         }
 
-        console.log(cards);
-
         var newCard = {
             id: request.IDAutoIncrement(cards),
             idUser: parseInt(this.props.idUser,10),
@@ -74,17 +64,11 @@ class AddCard extends Component {
         // If the new card has all its values settled
         if(isToCreate === true) {
             cards.push(newCard);
-
-            console.log(newCard);
     
-            sessionStorage.removeItem(cardsKey);
             sessionStorage.setItem(cardsKey, JSON.stringify(cards));
-    
-            cards = JSON.parse(sessionStorage.getItem(cardsKey));
-    
+        
         } else {
             console.log("champs manquants");
-
         }
 
         // Reset the input text fields
@@ -104,12 +88,12 @@ class AddCard extends Component {
 
         return(
             <div>
-                Indiquer la marque <input type="text" name="newBrand" value={this.state.newBrand} onChange={this.handleChange} />
-                Indiquer les 4 derniers chiffres <input type="text" name="newLastFour" value={this.state.newLastFour} onChange={this.handleChange} />
-                Indiquer la date d'expiration <input type="text" name="newExpireAt" value={this.state.newExpireAt} onChange={this.handleChange} />
+                Indiquer la marque: &ensp; <input type="text" name="newBrand" value={this.state.newBrand} onChange={this.handleChange} /> &ensp;
+                Indiquer les 4 derniers chiffres &ensp; <input type="text" name="newLastFour" value={this.state.newLastFour} onChange={this.handleChange} /> &ensp;
+                Indiquer la date d'expiration &ensp; <input type="text" name="newExpireAt" value={this.state.newExpireAt} onChange={this.handleChange} /> &ensp;
 
                 <br></br>
-                <button onClick={ () => this.addCard() }>  Valider la saisie </button> <br></br> <br></br>
+                <button onClick={ () => this.addCard() }> <h4> Valider la saisie </h4> </button> <br/>
                 <br></br>
             </div>
         );
@@ -119,7 +103,7 @@ class AddCard extends Component {
         return(
             <div className='AddCard'> 
                 <br></br>
-                Ajouter une carte : <br></br> 
+                <h4> Ajouter une carte: </h4>
                 {this.displayAddCard()}
             </div>
         )

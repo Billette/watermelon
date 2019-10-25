@@ -1,18 +1,13 @@
-//import React from 'react';
-//import {userList} from './Users.js';
-//import {creditCards} from './CreditCards.js';
-
 
 const request = {
 
-    getUsers: function(idUser){
+    getUsers: function(){
         var myUsers = [];
         var usersKey = 'Users';
         var users = JSON.parse(sessionStorage.getItem(usersKey));
         users.map((user) => {
-            if(user.id === parseInt(idUser, 10)){
-                myUsers.push(user);
-            }
+
+            myUsers.push(user);
             return myUsers; 
         });
 
@@ -30,7 +25,7 @@ const request = {
             return myUser; 
         });
 
-        return myUser;
+        return myUser[0];
     },
 
     getCreditCards : function(){
@@ -57,7 +52,7 @@ const request = {
             return myCards; 
         });
 
-        return myCards;
+        return myCards[0];
     },
 
     getCreditCardsOfUser: function(idUser){
@@ -73,6 +68,87 @@ const request = {
         });
 
         return myCards;
+    },
+
+    getWallets: function(){
+        var myWallet = [];
+        var walletsKey = 'Wallets';
+        var wallets = JSON.parse(sessionStorage.getItem(walletsKey));
+        wallets.map((wallet) => {
+
+            myWallet.push(wallet);
+            return myWallet; 
+        });
+
+        return myWallet;
+    },
+
+    getWalletByID: function(idWallet){
+        var myWallet = [];
+        var walletsKey = 'Wallets';
+        var wallets = JSON.parse(sessionStorage.getItem(walletsKey));
+        wallets.map((wallet) => {
+            if(wallet.id === parseInt(idWallet, 10)){
+                myWallet.push(wallet);
+            }
+            return myWallet; 
+        });
+
+        return myWallet[0];
+    },
+
+    getWalletOfUser: function(idUser){
+        var myWallet = [];
+        var walletsKey = 'Wallets';
+        var wallets = JSON.parse(sessionStorage.getItem(walletsKey));
+
+        wallets.map((wallet) => {
+            if(wallet.idUser === parseInt(idUser, 10)){
+                myWallet.push(wallet);
+            }
+            return myWallet; 
+        });
+
+        return myWallet[0];
+    },
+
+    getHistory: function(){
+        var History = [];
+        var historyKey = 'History';
+        var history = JSON.parse(sessionStorage.getItem(historyKey));
+        history.map((transaction) => {
+            History.push(transaction);
+            return History; 
+        });
+
+        return History;
+    },
+
+    getHistoryOfUser: function(idUser){
+        var myWallet = this.getWalletOfUser(idUser);
+
+        var myHistory = [];
+        var historyKey = 'History';
+        var history = JSON.parse(sessionStorage.getItem(historyKey));
+        history.map((transaction) => {
+            if( (transaction.type === 'payin' || transaction.type === 'payout') 
+            && transaction.idWallet === myWallet.id ){
+
+                myHistory.push(transaction);
+                return myHistory; 
+
+            } else if ((transaction.type === 'transfer') 
+            && (transaction.idDebitedWallet === myWallet.id || transaction.idCreditedWallet === myWallet.id) ) {
+                
+                myHistory.push(transaction);
+                return myHistory; 
+
+            } else {
+                return null;
+            }
+        });
+
+        return myHistory;
     },
     
     // Find a suitable ID for an array of object

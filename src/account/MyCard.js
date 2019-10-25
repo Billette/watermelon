@@ -10,6 +10,8 @@ class MyCard extends Component {
             newLastFour: '',
             newExpireAt: '',
             card: {},
+            myCards: this.props.myCards,
+            amount: '',
         }
 
         this.id = this.props.id;        
@@ -18,12 +20,14 @@ class MyCard extends Component {
         this.handleToUpdate = this.props.handleToUpdate;
     }
 
-    componentDidMount() {
-        this.setState({
-            myCards: request.getCreditCardsOfUser(this.state.idUser),
-            card: request.getCreditCardByID(this.props.id)[0],
-        })
-    } 
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+
+        return {
+            myCards: nextProps.myCards,
+            card: request.getCreditCardByID(nextProps.id),
+        }
+    }
         
 
     handleChange(event) {
@@ -32,31 +36,48 @@ class MyCard extends Component {
 
     // Dispay a single card and its details and buttons to remove, modify, payin and payout
     displayCard(){
-        
         return(
             <div> 
-                ID: {this.state.card.id} - Marque: {this.state.card.brand} - 4 derniers chiffres: {this.state.card.lastFour}
-                - Expire le: {this.state.card.expireAt} <br></br>
+                <h3>------------------------------------------------- </h3>
+                <b> Marque : </b> {this.state.card.brand} &emsp;-&emsp; <b>4 derniers chiffres :</b> {this.state.card.lastFour}
+                &emsp;-&emsp; <b> Expire le : </b> {this.state.card.expireAt} <br></br>
                     
-                <button onClick={ () => this.removeCard(this.state.card.id)}>  Supprimer la carte </button> <br></br> 
+                <button onClick={ () => this.removeCard(this.state.card.id)}> <h4> Supprimer la carte </h4> </button> 
 
-                {this.displayModify(this.state.card.id)}
+                {this.displayModify()} <br></br>
+                {this.displayPay()}
+
+                <h3>------------------------------------------------- </h3>
                 
             </div>
         )
     }
 
-    displayModify(cardID){
-
+    displayModify(){
         return(
             <div>
-                Changer la marque <input type="text" name="newBrand" value={this.state.newBrand} onChange={this.handleChange} />
-                Changer les 4 derniers chiffres <input type="text" name="newLastFour" value={this.state.newLastFour} onChange={this.handleChange} />
-                Changer la date d'expiration <input type="text" name="newExpireAt" value={this.state.newExpireAt} onChange={this.handleChange} />
+                Changer la marque: &ensp; <input type="text" name="newBrand" value={this.state.newBrand} onChange={this.handleChange} /> &ensp;
+                Changer les 4 derniers chiffres: &ensp; <input type="text" name="newLastFour" value={this.state.newLastFour} onChange={this.handleChange} /> &ensp;
+                Changer la date d'expiration: &ensp; <input type="text" name="newExpireAt" value={this.state.newExpireAt} onChange={this.handleChange} /> &ensp;
 
                 <br></br>
-                <button onClick={ () => this.modifyCard(cardID)}>  Valider les changements </button> <br></br> <br></br>
+                <button onClick={ () => this.modifyCard(this.state.card.id)}>  <h4> Valider les changements </h4> </button> 
                 <br></br>
+
+            </div>
+        );
+    }
+
+    displayPay(){
+        return(
+            <div>
+                Indiquer le montant: &ensp; <input type="text" name="amount" value={this.state.amount} onChange={this.handleChange} />
+
+                <br></br>
+                <button onClick={ () => this.payin()}>  Effectuer un dépôt </button> <br></br>
+                <button onClick={ () => this.payout()}>  Effectuer un retrait </button> <br></br>
+                <br></br>
+
             </div>
         );
     }
@@ -64,89 +85,160 @@ class MyCard extends Component {
     removeCard(idCard){
         var cardsKey = 'Cards';
 
-        var cards = JSON.parse(sessionStorage.getItem(cardsKey));
+        var cards = request.getCreditCards();
 
         //get the new cards without the removed card
         var newCards = cards.filter( card => card.id !== idCard );
 
-        sessionStorage.removeItem(cardsKey);
         sessionStorage.setItem(cardsKey, JSON.stringify(newCards));
 
-        // New state of cards
-        this.setState({
-            myCards: request.getCreditCardsOfUser(this.state.idUser),
-            card: {},
-        })
-
-        //Inform the parent (MyCreditCards) to re-render
+        //Inform the super-parent (MyAccount) to re-render
         var handleToUpdate = this.props.handleToUpdate;
         handleToUpdate();
         
-
     }
 
     modifyCard(idCard){
         var cardsKey = 'Cards';
-
-        var cards = JSON.parse(sessionStorage.getItem(cardsKey));
+        var cards = request.getCreditCards();
+        var isToModify = true;
 
         //get the new cards without the removed card
         var newCards = cards.filter( card => card.id !== idCard );
 
         //get the card to modify
-        var cardToModify = cards.filter( card => card.id === idCard );
+        var cardToModify = cards.filter( card => card.id === idCard )[0];
 
         let newBrand = '';
         let newLastFour = '';
         let newExpireAt = '';
 
-        // Check for empty text fields
-        if(this.state.newBrand !== '') 
-        {
-            newBrand = this.state.newBrand;
+        // If all fields are empty, noting to modify
+        if(this.state.newBrand === '' && this.state.newLastFour === '' && this.state.newExpireAt === ''){
+            isToModify = false
+        }
+
+        if(isToModify === true){
+                // Check for empty text fields
+            if(this.state.newBrand !== '') {
+                newBrand = this.state.newBrand;
+            } else {
+                newBrand = cardToModify.brand;
+            }
+
+            if(this.state.newLastFour !== '') {
+                newLastFour = this.state.newLastFour;
+            } else {
+                newLastFour = cardToModify.lastFour;
+            }
+
+            if(this.state.newExpireAt !== '') {
+                newExpireAt = this.state.newExpireAt;
+            } else {
+                newExpireAt = cardToModify.expireAt;
+            }
+
+            var newCard = {
+                id: cardToModify.id,
+                idUser: cardToModify.idUser,
+                lastFour: newLastFour,
+                brand: newBrand,
+                expireAt: newExpireAt, 
+            }
+
+            newCards.push(newCard);
+
+            sessionStorage.setItem(cardsKey, JSON.stringify(newCards));
+
+            // Reset the input text fields
+            this.setState({
+                newBrand: '',
+                newLastFour: '',
+                newExpireAt: '',
+            });
+
+            //Inform the parent (MyCreditCards) to re-render
+            var handleToUpdate = this.props.handleToUpdate;
+            handleToUpdate();     
+
         } else {
-            newBrand = cardToModify[0].brand;
+            console.log('Rien à modifier');
+        }
+           
+    }
+
+    payin(){
+        var walletsKey = 'Wallets';
+        var isToPayIn = true;
+        var idUser = this.state.card.idUser;
+        var amount = parseInt(this.state.amount, 10);
+
+        var myWallet = request.getWalletOfUser(idUser);
+
+        // If the amount is not a number or negative, we cannot allow the payin
+        if(isNaN(amount) || amount < 0) {
+            isToPayIn = false;
         }
 
-        if(this.state.newLastFour !== '') 
-        {
-            newLastFour = this.state.newLastFour;
+        if(isToPayIn === true) {
+            myWallet.balance += amount;
+
+            var wallets = request.getWallets();
+
+            var newWallets = wallets.filter( wallet => wallet.id !== myWallet.id );
+            newWallets.push(myWallet);
+
+            sessionStorage.setItem(walletsKey, JSON.stringify(newWallets));
+
+            this.setState({
+                amount: '',
+            })
+
+            //Inform the parent (MyCreditCards) to re-render
+            var handleToUpdate = this.props.handleToUpdate;
+            handleToUpdate();
+
         } else {
-            newLastFour = cardToModify[0].lastFour;
+            console.log('Veuillez rentrer un montant de dépot positif');
         }
 
-        if(this.state.newExpireAt !== '') 
-        {
-            newExpireAt = this.state.newExpireAt;
+    }
+
+    payout(){
+        var walletsKey = 'Wallets';
+        var isToPayOut = true;
+        var idUser = this.state.card.idUser;
+        var amount = parseInt(this.state.amount, 10);
+
+        var myWallet = request.getWalletOfUser(idUser);
+
+        // If the amount is not a number or negative, or exceed the balance, we cannot allow the payout
+        if(isNaN(amount) || amount < 0 || amount > myWallet.balance) {
+            isToPayOut = false;
+        }
+
+        if(isToPayOut === true) {
+            myWallet.balance -= amount;
+
+            var wallets = request.getWallets();
+
+            var newWallets = wallets.filter( wallet => wallet.id !== myWallet.id );
+            newWallets.push(myWallet);
+
+            sessionStorage.setItem(walletsKey, JSON.stringify(newWallets));
+
+            this.setState({
+                amount: '',
+            })
+
+            //Inform the parent (MyCreditCards) to re-render
+            var handleToUpdate = this.props.handleToUpdate;
+            handleToUpdate();
+
         } else {
-            newExpireAt = cardToModify[0].expireAt;
+            console.log('Veuillez rentrer un montant de retrait adéquat');
         }
 
-        var newCard = {
-            id: cardToModify[0].id,
-            idUser: cardToModify[0].idUser,
-            lastFour: newLastFour,
-            brand: newBrand,
-            expireAt: newExpireAt, 
-        }
-
-        newCards.push(newCard);
-
-        sessionStorage.removeItem(cardsKey);
-        sessionStorage.setItem(cardsKey, JSON.stringify(newCards));
-
-        // New state of cards
-        this.setState({
-            myCards: request.getCreditCardsOfUser(this.state.idUser),
-            card: request.getCreditCardByID(this.props.id)[0],
-        });
-
-        // Reset the input text fields
-        this.setState({
-            newBrand: '',
-            newLastFour: '',
-            newExpireAt: '',
-        });
     }
 
     render(){
