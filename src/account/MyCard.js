@@ -10,6 +10,7 @@ class MyCard extends Component {
             newLastFour: '',
             newExpireAt: '',
             card: {},
+            myCards: this.props.myCards,
             amount: '',
         }
 
@@ -19,12 +20,14 @@ class MyCard extends Component {
         this.handleToUpdate = this.props.handleToUpdate;
     }
 
-    componentDidMount() {
-        this.setState({
-            myCards: request.getCreditCardsOfUser(this.state.idUser),
-            card: request.getCreditCardByID(this.props.id)[0],
-        })
-    } 
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+
+        return {
+            myCards: nextProps.myCards,
+            card: request.getCreditCardByID(nextProps.id),
+        }
+    }
         
 
     handleChange(event) {
@@ -88,17 +91,10 @@ class MyCard extends Component {
 
         sessionStorage.setItem(cardsKey, JSON.stringify(newCards));
 
-        // New state of cards
-        this.setState({
-            myCards: request.getCreditCardsOfUser(this.state.idUser),
-            card: {},
-        })
-
-        //Inform the parent (MyCreditCards) to re-render
+        //Inform the super-parent (MyAccount) to re-render
         var handleToUpdate = this.props.handleToUpdate;
         handleToUpdate();
         
-
     }
 
     modifyCard(idCard){
@@ -109,7 +105,7 @@ class MyCard extends Component {
         var newCards = cards.filter( card => card.id !== idCard );
 
         //get the card to modify
-        var cardToModify = cards.filter( card => card.id === idCard );
+        var cardToModify = cards.filter( card => card.id === idCard )[0];
 
         let newBrand = '';
         let newLastFour = '';
@@ -120,26 +116,26 @@ class MyCard extends Component {
         {
             newBrand = this.state.newBrand;
         } else {
-            newBrand = cardToModify[0].brand;
+            newBrand = cardToModify.brand;
         }
 
         if(this.state.newLastFour !== '') 
         {
             newLastFour = this.state.newLastFour;
         } else {
-            newLastFour = cardToModify[0].lastFour;
+            newLastFour = cardToModify.lastFour;
         }
 
         if(this.state.newExpireAt !== '') 
         {
             newExpireAt = this.state.newExpireAt;
         } else {
-            newExpireAt = cardToModify[0].expireAt;
+            newExpireAt = cardToModify.expireAt;
         }
 
         var newCard = {
-            id: cardToModify[0].id,
-            idUser: cardToModify[0].idUser,
+            id: cardToModify.id,
+            idUser: cardToModify.idUser,
             lastFour: newLastFour,
             brand: newBrand,
             expireAt: newExpireAt, 
@@ -149,18 +145,16 @@ class MyCard extends Component {
 
         sessionStorage.setItem(cardsKey, JSON.stringify(newCards));
 
-        // New state of cards
-        this.setState({
-            myCards: request.getCreditCardsOfUser(this.state.idUser),
-            card: request.getCreditCardByID(this.props.id)[0],
-        });
-
         // Reset the input text fields
         this.setState({
             newBrand: '',
             newLastFour: '',
             newExpireAt: '',
         });
+
+        //Inform the parent (MyCreditCards) to re-render
+        var handleToUpdate = this.props.handleToUpdate;
+        handleToUpdate();        
     }
 
     payin(){
@@ -169,7 +163,7 @@ class MyCard extends Component {
         var idUser = this.state.card.idUser;
         var amount = parseInt(this.state.amount, 10);
 
-        var myWallet = request.getWalletOfUser(idUser)[0];
+        var myWallet = request.getWalletOfUser(idUser);
 
         // If the amount is not a number or negative, we cannot allow the payin
         if(isNaN(amount) || amount < 0) {
@@ -186,6 +180,10 @@ class MyCard extends Component {
 
             sessionStorage.setItem(walletsKey, JSON.stringify(newWallets));
 
+            this.setState({
+                amount: '',
+            })
+
             //Inform the parent (MyCreditCards) to re-render
             var handleToUpdate = this.props.handleToUpdate;
             handleToUpdate();
@@ -197,6 +195,39 @@ class MyCard extends Component {
     }
 
     payout(){
+        var walletsKey = 'Wallets';
+        var isToPayOut = true;
+        var idUser = this.state.card.idUser;
+        var amount = parseInt(this.state.amount, 10);
+
+        var myWallet = request.getWalletOfUser(idUser);
+
+        // If the amount is not a number or negative, or exceed the balance, we cannot allow the payout
+        if(isNaN(amount) || amount < 0 || amount > myWallet.balance) {
+            isToPayOut = false;
+        }
+
+        if(isToPayOut === true) {
+            myWallet.balance -= amount;
+
+            var wallets = request.getWallets();
+
+            var newWallets = wallets.filter( wallet => wallet.id !== myWallet.id );
+            newWallets.push(myWallet);
+
+            sessionStorage.setItem(walletsKey, JSON.stringify(newWallets));
+
+            this.setState({
+                amount: '',
+            })
+
+            //Inform the parent (MyCreditCards) to re-render
+            var handleToUpdate = this.props.handleToUpdate;
+            handleToUpdate();
+
+        } else {
+            console.log('Veuillez rentrer un montant de retrait adéquat');
+        }
 
     }
 

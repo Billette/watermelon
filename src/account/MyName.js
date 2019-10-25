@@ -14,7 +14,7 @@ class MyName extends Component {
 
     componentDidMount(){
         this.setState({
-            myUser: request.getUserByID(this.state.idUser)[0],
+            myUser: request.getUserByID(this.state.idUser),
         });
     }
 

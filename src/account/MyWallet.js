@@ -8,7 +8,7 @@ class MyWallet extends Component {
         super(props);
         this.state = {
             idUser: this.props.idUser,
-            wallet: {},
+            myWallet: this.props.myWallet,
             idWalletDest: '',
             amount: '',
         };
@@ -17,10 +17,11 @@ class MyWallet extends Component {
         this.handleToUpdate = this.props.handleToUpdate;
     }
 
-    componentDidMount(){
-        this.setState({
-            wallet: request.getWalletOfUser(this.state.idUser)[0],
-        })
+    static getDerivedStateFromProps(nextProps, prevState) {
+
+        return {
+            myWallet: nextProps.myWallet,
+        }
     }
 
     handleChange(event) {
@@ -31,7 +32,7 @@ class MyWallet extends Component {
         return(
             <div className='WalletInfo'>
                 Vos information de portefeuille : <br></br>
-                ID : {this.state.wallet.id} &emsp; Montant : {this.state.wallet.balance}
+                ID : {this.state.myWallet.id} &emsp; Montant : {this.state.myWallet.balance}
             </div>
         );
     }
@@ -44,7 +45,7 @@ class MyWallet extends Component {
                 Montant <input type="text" name="amount" value={this.state.amount} onChange={this.handleChange} />
 
                 <br></br>
-                <button onClick={ () => this.transfer(this.state.wallet.id, this.state.idWalletDest, this.state.amount)}>  Valider le virement </button> 
+                <button onClick={ () => this.transfer(this.state.myWallet.id, this.state.idWalletDest, this.state.amount)}>  Valider le virement </button> 
                 <br></br>
             </div>
         );
@@ -56,16 +57,14 @@ class MyWallet extends Component {
         idWalletDest = parseInt(idWalletDest, 10);
         amount = parseInt(amount, 10);
 
-        var myWallet = request.getWalletByID(idWallet)[0];
-        var destWallet = request.getWalletByID(idWalletDest)[0];
+        var myWallet = this.state.myWallet;
+        var destWallet = request.getWalletByID(idWalletDest);
 
         var walletsKey = 'Wallets';
         var wallets = request.getWallets();
 
         //get the new wallets without the removed wallets of source and destination
         var newWallets = wallets.filter( wallet => (wallet.id !== idWallet) && (wallet.id !== idWalletDest));
-
-        console.log(newWallets);
 
         var isToTransfer = true;
 
@@ -87,12 +86,16 @@ class MyWallet extends Component {
             sessionStorage.removeItem(walletsKey);
             sessionStorage.setItem(walletsKey, JSON.stringify(newWallets));
 
-            // resetting the input text fields, and refreshing the wallet content
+            // resetting the input text fields,
             this.setState({
                 idWalletDest: '',
                 amount: '',
-                wallet: request.getWalletOfUser(this.state.idUser)[0]
+
             });
+
+            //Inform the super-parent (MyAccount) to re-render
+            var handleToUpdate = this.props.handleToUpdate;
+            handleToUpdate();
 
         } else {
             console.log('Merci de rentrer un nombre entier positif');

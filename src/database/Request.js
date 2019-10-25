@@ -29,7 +29,7 @@ const request = {
             return myUser; 
         });
 
-        return myUser;
+        return myUser[0];
     },
 
     getCreditCards : function(){
@@ -56,7 +56,7 @@ const request = {
             return myCards; 
         });
 
-        return myCards;
+        return myCards[0];
     },
 
     getCreditCardsOfUser: function(idUser){
@@ -98,7 +98,7 @@ const request = {
             return myWallet; 
         });
 
-        return myWallet;
+        return myWallet[0];
     },
 
     getWalletOfUser: function(idUser){
@@ -113,7 +113,7 @@ const request = {
             return myWallet; 
         });
 
-        return myWallet;
+        return myWallet[0];
     },
     
     // Find a suitable ID for an array of object
