@@ -1,7 +1,3 @@
-//import React from 'react';
-//import {userList} from './Users.js';
-//import {creditCards} from './CreditCards.js';
-
 
 const request = {
 
@@ -114,6 +110,45 @@ const request = {
         });
 
         return myWallet[0];
+    },
+
+    getHistory: function(){
+        var History = [];
+        var historyKey = 'History';
+        var history = JSON.parse(sessionStorage.getItem(historyKey));
+        history.map((transaction) => {
+            History.push(transaction);
+            return History; 
+        });
+
+        return History;
+    },
+
+    getHistoryOfUser: function(idUser){
+        var myWallet = this.getWalletOfUser(idUser);
+
+        var myHistory = [];
+        var historyKey = 'History';
+        var history = JSON.parse(sessionStorage.getItem(historyKey));
+        history.map((transaction) => {
+            if( (transaction.type === 'payin' || transaction.type === 'payout') 
+            && transaction.idWallet === myWallet.id ){
+
+                myHistory.push(transaction);
+                return myHistory; 
+
+            } else if ((transaction.type === 'transfer') 
+            && (transaction.idDebitedWallet === myWallet.id || transaction.idCreditedWallet === myWallet.id) ) {
+                
+                myHistory.push(transaction);
+                return myHistory; 
+
+            } else {
+                return null;
+            }
+        });
+
+        return myHistory;
     },
     
     // Find a suitable ID for an array of object

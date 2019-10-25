@@ -21,7 +21,9 @@ class MyName extends Component {
     render(){
         return(
             <div className='MyName'>
-                <div> Votre compte : {this.state.myUser.firstName} - {this.state.myUser.lastName} - {this.state.myUser.email}</div>
+                <div> <h2> Votre compte </h2>
+                {this.state.myUser.firstName} {this.state.myUser.lastName} &emsp;-&emsp; {this.state.myUser.email}</div>
+                <br/>
             </div>
         )
     }

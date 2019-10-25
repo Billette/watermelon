@@ -43,7 +43,8 @@ class MyCreditCards extends Component {
 
         return(
             <div className='MyCreditCards'>
-                Vos cartes de crédit : {this.displayListCards()} 
+                <h2> Vos cartes de crédit </h2>
+                 {this.displayListCards()} 
                 <AddCard idUser={this.state.idUser} handleToUpdate={handleToUpdate.bind(this)}/>
             </div>
         )
