@@ -27,8 +27,14 @@ We simulated a database that is stored in the _sessionStorage_ of the browser. A
     </li> <br/>
 </ul>
 
+<<<<<<< HEAD
 The idea is that the ID of the wallet represents the __IBAN__ of a user, so it is kept _secret_ until the user give this number to another one for a transfer.
 
 The transfer is done from wallet to wallet, however the payins/payout are made through a specific card. There is no checks for the amount of money made for payins. 
 
 The rest should correspond to the specifications. We do not add server-side or any bonus.
+=======
+The idea is that the ID of the wallet represents the __IBAN__ of a user, so it is kept _secret_ until the user give this number to another for a transfer.
+
+The transfer is done from wallet to wallet, however the payins/payout are made through a specific card. There is no checks for the amount of money made for payins. 
+>>>>>>> master
