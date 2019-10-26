@@ -1,163 +1,84 @@
-
 const request = {
+  getUsers: () => JSON.parse(sessionStorage.getItem("Users")),
 
-    getUsers: function(){
-        var myUsers = [];
-        var usersKey = 'Users';
-        var users = JSON.parse(sessionStorage.getItem(usersKey));
-        users.map((user) => {
+  getUserByID: idUser => {
+    const users = request.getUsers();
+    return users && users.find(u => u.id === parseInt(idUser));
+  },
 
-            myUsers.push(user);
-            return myUsers; 
-        });
+  addUser: newUser => {
+    const users = request.getUsers() || [];
+    const wallets = request.getWallets() || [];
+    const walletId = request.IDAutoIncrement(wallets);
 
-        return myUsers;
-    },
+    // Init user data
+    sessionStorage.setItem("Users", JSON.stringify([...users, newUser]));
+    sessionStorage.setItem(
+      "Wallets",
+      JSON.stringify([
+        ...wallets,
+        {
+          id: walletId,
+          idUser: newUser.id,
+          balance: 0
+        }
+      ])
+    );
+    sessionStorage.setItem("Cards", JSON.stringify([]));
+    sessionStorage.setItem("History", JSON.stringify([]));
+  },
 
-    getUserByID: function(idUser){
-        var myUser = [];
-        var usersKey = 'Users';
-        var users = JSON.parse(sessionStorage.getItem(usersKey));
-        users.map((user) => {
-            if(user.id === parseInt(idUser, 10)){
-                myUser.push(user);
-            }
-            return myUser; 
-        });
+  getCreditCards: () => JSON.parse(sessionStorage.getItem("Cards")),
 
-        return myUser[0];
-    },
+  getCreditCardByID: () => creditCardId => {
+    const creditCards = request.getCreditCards();
+    return (
+      creditCards && creditCards.find(c => c.id === parseInt(creditCardId))
+    );
+  },
 
-    getCreditCards : function(){
-        var myCards = [];
-        var cardsKey = 'Cards';
-        var creditCards = JSON.parse(sessionStorage.getItem(cardsKey));
- 
-        creditCards.map((card) => {
-            myCards.push(card);
-            return myCards; 
-        });
+  getCreditCardsOfUser: idUser => {
+    const creditCards = request.getCreditCards();
+    return (
+      creditCards && creditCards.filter(c => c.idUser === parseInt(idUser))
+    );
+  },
 
-        return myCards;
-    },
+  getWallets: () => JSON.parse(sessionStorage.getItem("Wallets")),
 
-    getCreditCardByID: function(idCard){
-        var myCards = [];
-        var cardsKey = 'Cards';
-        var cards = JSON.parse(sessionStorage.getItem(cardsKey));
-        cards.map((card) => {
-            if(card.id === parseInt(idCard, 10)){
-                myCards.push(card);
-            }
-            return myCards; 
-        });
+  getWalletByID: walletId => {
+    const wallets = request.getWallets();
+    return wallets && wallets.find(w => w.id === parseInt(walletId));
+  },
 
-        return myCards[0];
-    },
+  getWalletOfUser: idUser => {
+    const wallets = request.getWallets();
+    return wallets && wallets.find(w => w.idUser === parseInt(idUser));
+  },
 
-    getCreditCardsOfUser: function(idUser){
-        var myCards = [];
-        var cardsKey = 'Cards';
-        var creditCards = JSON.parse(sessionStorage.getItem(cardsKey));
+  getHistory: () => JSON.parse(sessionStorage.getItem("History")),
 
-        creditCards.map((card) => {
-            if(card.idUser === parseInt(idUser, 10)){
-                myCards.push(card);
-            }
-            return myCards; 
-        });
+  getHistoryOfUser: idUser => {
+    const wallet = request.getWalletOfUser(idUser);
+    const history = request.getHistory();
 
-        return myCards;
-    },
+    return (
+      wallet &&
+      history &&
+      history.filter(
+        h => h.idWallet === wallet.id || h.idDebitedWallet === wallet.id
+      )
+    );
+  },
 
-    getWallets: function(){
-        var myWallet = [];
-        var walletsKey = 'Wallets';
-        var wallets = JSON.parse(sessionStorage.getItem(walletsKey));
-        wallets.map((wallet) => {
-
-            myWallet.push(wallet);
-            return myWallet; 
-        });
-
-        return myWallet;
-    },
-
-    getWalletByID: function(idWallet){
-        var myWallet = [];
-        var walletsKey = 'Wallets';
-        var wallets = JSON.parse(sessionStorage.getItem(walletsKey));
-        wallets.map((wallet) => {
-            if(wallet.id === parseInt(idWallet, 10)){
-                myWallet.push(wallet);
-            }
-            return myWallet; 
-        });
-
-        return myWallet[0];
-    },
-
-    getWalletOfUser: function(idUser){
-        var myWallet = [];
-        var walletsKey = 'Wallets';
-        var wallets = JSON.parse(sessionStorage.getItem(walletsKey));
-
-        wallets.map((wallet) => {
-            if(wallet.idUser === parseInt(idUser, 10)){
-                myWallet.push(wallet);
-            }
-            return myWallet; 
-        });
-
-        return myWallet[0];
-    },
-
-    getHistory: function(){
-        var History = [];
-        var historyKey = 'History';
-        var history = JSON.parse(sessionStorage.getItem(historyKey));
-        history.map((transaction) => {
-            History.push(transaction);
-            return History; 
-        });
-
-        return History;
-    },
-
-    getHistoryOfUser: function(idUser){
-        var myWallet = this.getWalletOfUser(idUser);
-
-        var myHistory = [];
-        var historyKey = 'History';
-        var history = JSON.parse(sessionStorage.getItem(historyKey));
-        history.map((transaction) => {
-            if( (transaction.type === 'payin' || transaction.type === 'payout') 
-            && transaction.idWallet === myWallet.id ){
-
-                myHistory.push(transaction);
-                return myHistory; 
-
-            } else if ((transaction.type === 'transfer') 
-            && (transaction.idDebitedWallet === myWallet.id || transaction.idCreditedWallet === myWallet.id) ) {
-                
-                myHistory.push(transaction);
-                return myHistory; 
-
-            } else {
-                return null;
-            }
-        });
-
-        return myHistory;
-    },
-    
-    // Find a suitable ID for an array of object
-    IDAutoIncrement: function(array){
-        return (Math.max.apply(Math, array.map(function(object) { 
-            return (object.id); 
-        })) + 1)
-    }    
-
-}
+  // Find a suitable ID for an array of object
+  IDAutoIncrement: array => {
+    const max =
+      array &&
+      array.length > 0 &&
+      Math.max.apply(Math, array.map(({ id }) => id));
+    return max ? max + 1 : 1;
+  }
+};
 
 export default request;

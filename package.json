@@ -2,7 +2,7 @@
   "name": "watermelon",
   "version": "0.1.0",
   "private": true,
-  "description" : "maxime billette - amir messedi",
+  "description": "maxime billette - amir messedi",
   "dependencies": {
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
