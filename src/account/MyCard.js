@@ -3,9 +3,9 @@ import request from "../database/Request.js";
 
 class MyCard extends Component {
   state = {
-    newBrand: null,
-    newLastFour: null,
-    newExpireAt: null
+    newBrand: "",
+    newLastFour: "",
+    newExpireAt: ""
   };
 
   handleChange = event => {
@@ -163,7 +163,7 @@ class MyCard extends Component {
         newExpireAt: ""
       });
 
-      //Inform the parent (MyCreditCards) to re-render
+      //Inform the super-parent (MyAccount) to re-render
       var handleToUpdate = this.props.handleToUpdate;
       handleToUpdate();
     } else {
@@ -172,7 +172,6 @@ class MyCard extends Component {
   };
 
   payin = () => {
-    var walletsKey = "Wallets";
     var isToPayIn = true;
     var idUser = this.props.idUser;
     var amount = parseInt(this.state.amount, 10);
@@ -192,7 +191,24 @@ class MyCard extends Component {
       var newWallets = wallets.filter(wallet => wallet.id !== myWallet.id);
       newWallets.push(myWallet);
 
+      var history = request.getHistory();
+      var transaction = {
+        id: request.IDAutoIncrement(history),
+        type: "payin",
+        idWallet: myWallet.id,
+        amount: amount
+      };
+
+      history.push(transaction);
+      var newHistory = history;
+
+      //Put into the wallet storage
+      var walletsKey = "Wallets";
       sessionStorage.setItem(walletsKey, JSON.stringify(newWallets));
+
+      //put into the history storage
+      var historyKey = "History";
+      sessionStorage.setItem(historyKey, JSON.stringify(newHistory));
 
       this.setState({
         amount: ""
@@ -206,7 +222,6 @@ class MyCard extends Component {
   };
 
   payout = () => {
-    var walletsKey = "Wallets";
     var isToPayOut = true;
     var idUser = this.props.idUser;
     var amount = parseInt(this.state.amount, 10);
@@ -226,7 +241,24 @@ class MyCard extends Component {
       var newWallets = wallets.filter(wallet => wallet.id !== myWallet.id);
       newWallets.push(myWallet);
 
+      var history = request.getHistory();
+      var transaction = {
+        id: request.IDAutoIncrement(history),
+        type: "payout",
+        idWallet: myWallet.id,
+        amount: amount
+      };
+
+      history.push(transaction);
+      var newHistory = history;
+
+      //Put into the wallet storage
+      var walletsKey = "Wallets";
       sessionStorage.setItem(walletsKey, JSON.stringify(newWallets));
+
+      //put into the history storage
+      var historyKey = "History";
+      sessionStorage.setItem(historyKey, JSON.stringify(newHistory));
 
       this.setState({
         amount: ""

@@ -17,6 +17,7 @@ class MyAccount extends Component {
   //Refresh the page when a modification is made
   handleToUpdate = () => {
     this.setState({
+      idUser: sessionStorage.getItem("idUser"),
       myUser: request.getUserByID(this.state.idUser),
       myCards: request.getCreditCardsOfUser(this.state.idUser),
       myWallet: request.getWalletOfUser(this.state.idUser),
