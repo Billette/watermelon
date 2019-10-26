@@ -115,8 +115,6 @@ class MyName extends Component {
         password: newPassword
       };
 
-      console.log(newUser);
-
       newUsers.push(newUser);
       sessionStorage.setItem(usersKey, JSON.stringify(newUsers));
 
