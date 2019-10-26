@@ -59,26 +59,26 @@ class Subscribe extends Component {
             }
           }}
         >
-          <label for="firstName">First name:</label>
+          <label htmlFor="firstName">First name:</label>
           <input
             required
             name="firstName"
             onChange={e => this.setState({ firstName: e.target.value })}
           />
-          <label for="lastName">Last name:</label>
+          <label htmlFor="lastName">Last name:</label>
           <input
             required
             name="lastName"
             onChange={e => this.setState({ lastName: e.target.value })}
           />
-          <label for="email">Email:</label>
+          <label htmlFor="email">Email:</label>
           <input
             required
             type="email"
             name="email"
             onChange={e => this.setState({ email: e.target.value })}
           />
-          <label for="password">Password:</label>
+          <label htmlFor="password">Password:</label>
           <input
             required
             type="password"
