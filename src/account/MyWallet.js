@@ -18,7 +18,7 @@ class MyWallet extends Component {
     } = this.props;
     return (
       <div className="WalletInfo">
-        <h2> Vos information de portefeuille </h2>
+        <h2> Vos informations de portefeuille </h2>
         <h3 style={{ marginLeft: 10 }}>
           ID: {id} &emsp; Montant: {balance}
         </h3>
