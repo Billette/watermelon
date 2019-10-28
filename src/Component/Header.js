@@ -14,7 +14,7 @@ class Header extends Component {
             display: "center"
           }}
         >
-          <h1>Watermelon</h1> <img src={logo192} alt="logo" />
+          <h1>Watermelon</h1> <img src={logo192} alt="logo"/>
         </div>
       </div>
     );
