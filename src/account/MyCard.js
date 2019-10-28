@@ -5,7 +5,10 @@ class MyCard extends Component {
   state = {
     newBrand: "",
     newLastFour: "",
-    newExpireAt: ""
+    newExpireAt: "",
+    errorPayIn: "",
+    errorPayOut: "",
+    errorNoModif: "",
   };
 
   handleChange = event => {
@@ -33,6 +36,7 @@ class MyCard extends Component {
   };
 
   displayModify = () => {
+    var errorNoModif = this.state.errorNoModif;
     return (
       <div>
         Changer la marque: &ensp;{" "}
@@ -62,12 +66,17 @@ class MyCard extends Component {
           {" "}
           <h4> Valider les changements </h4>{" "}
         </button>
+        {errorNoModif==="" ? null : <p style={{ color: "red" }}>{errorNoModif}</p>}
         <br></br>
       </div>
     );
   };
 
   displayPay = () => {
+    var errorPayIn = this.state.errorPayIn;
+    var errorPayOut = this.state.errorPayOut;
+    //var errorNoModif = this.state.errorNoModif;
+
     return (
       <div>
         Indiquer le montant: &ensp;{" "}
@@ -77,13 +86,13 @@ class MyCard extends Component {
           value={this.state.amount}
           onChange={this.handleChange}
         />
+
         <br></br>
         <button onClick={() => this.payin()}> Effectuer un dépôt </button>{" "}
+        {errorPayIn==="" ? null : <p style={{ color: "red" }}>{errorPayIn}</p>}
         <br></br>
-        <button onClick={() => this.payout()}>
-          {" "}
-          Effectuer un retrait{" "}
-        </button>{" "}
+        <button onClick={() => this.payout()}>  Effectuer un retrait </button>{" "}
+        {errorPayOut==="" ? null : <p style={{ color: "red" }}>{errorPayOut}</p>}
         <br></br>
         <br></br>
       </div>
@@ -160,14 +169,18 @@ class MyCard extends Component {
       this.setState({
         newBrand: "",
         newLastFour: "",
-        newExpireAt: ""
+        newExpireAt: "",
+        errorNoModif: "",
       });
 
       //Inform the super-parent (MyAccount) to re-render
       var handleToUpdate = this.props.handleToUpdate;
       handleToUpdate();
     } else {
-      console.log("Rien à modifier");
+      this.setState({
+        errorNoModif: "Rien à modifier",
+      });
+      //console.log("Rien à modifier");
     }
   };
 
@@ -211,13 +224,18 @@ class MyCard extends Component {
       sessionStorage.setItem(historyKey, JSON.stringify(newHistory));
 
       this.setState({
-        amount: ""
+        amount: "",
+        errorPayIn: "",
       });
 
       //Inform the parent (MyCreditCards) to re-render
       this.props.handleToUpdate();
+
     } else {
-      console.log("Veuillez rentrer un montant de dépot positif");
+      //console.log("Veuillez rentrer un montant de dépôt positif");
+      this.setState({
+        errorPayIn: "Veuillez rentrer un montant de dépôt positif",
+      })
     }
   };
 
@@ -261,14 +279,18 @@ class MyCard extends Component {
       sessionStorage.setItem(historyKey, JSON.stringify(newHistory));
 
       this.setState({
-        amount: ""
+        amount: "",
+        errorPayOut: "",
       });
 
       //Inform the parent (MyCreditCards) to re-render
       var handleToUpdate = this.props.handleToUpdate;
       handleToUpdate();
     } else {
-      console.log("Veuillez rentrer un montant de retrait adéquat");
+      this.setState({
+        errorPayOut: "Veuillez rentrer un montant de retrait adéquat",
+      })
+      //console.log("Veuillez rentrer un montant de retrait adéquat");
     }
   };
 

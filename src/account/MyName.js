@@ -8,6 +8,7 @@ class MyName extends Component {
     newLastName: "",
     newEmail: "",
     newPassword: "",
+    errorNoModif: "",
   };
 
   handleChange = event => {
@@ -15,6 +16,8 @@ class MyName extends Component {
   };
 
   displayModify = () => {
+    var errorNoModif = this.state.errorNoModif;
+
     return (
       <div>
         Changer le prénom: &ensp;{" "}
@@ -50,6 +53,7 @@ class MyName extends Component {
           {" "}
           <h4> Valider les changements </h4>{" "}
         </button>
+        {errorNoModif==="" ? null : <p style={{ color: "red" }}>{errorNoModif}</p>}
         <br></br>
       </div>
     );
@@ -124,13 +128,17 @@ class MyName extends Component {
         newLastName: "",
         newEmail: "",
         newPassword: "",
+        errorNoModif: "",
       });
 
       //Inform the super-parent (MyAccount) to re-render
       var handleToUpdate = this.props.handleToUpdate;
       handleToUpdate();
     } else {
-      console.log("Rien à modifier");
+      this.setState({
+        errorNoModif: "Rien à modifier",
+      })
+      //console.log("Rien à modifier");
     }
   };
 

@@ -45,12 +45,12 @@ class Login extends Component {
             alignItems: "center"
           }}
         >
-          <label for="email">Email:</label>
+          <label htmlFor="email">Email:</label>
           <input
             name="email"
             onChange={e => this.setState({ email: e.target.value })}
           />
-          <label for="password">Password:</label>
+          <label htmlFor="password">Password:</label>
           <input
             name="password"
             onChange={e => this.setState({ password: e.target.value })}
