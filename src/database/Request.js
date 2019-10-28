@@ -1,49 +1,84 @@
-import React from 'react';
-import {userList} from './Users.js';
-import {creditCards} from './CreditCards.js';
-
-
 const request = {
+  getUsers: () => JSON.parse(sessionStorage.getItem("Users")),
 
-    getUsers: function(){
-        var users = userList.map((user) => {
-            return (
-                <li key={`${user.id}`}>
-                    {user.id} - {user.firstName} - {user.lastName}
-                </li>
-            );
-        });
+  getUserByID: idUser => {
+    const users = request.getUsers();
+    return users && users.find(u => u.id === parseInt(idUser));
+  },
 
-        return users;
-    },
+  addUser: newUser => {
+    const users = request.getUsers() || [];
+    const wallets = request.getWallets() || [];
+    const walletId = request.IDAutoIncrement(wallets);
 
-    getCreditCards : function(){
-        var cards = creditCards.map((card) => {
-            return (
-                <li key={`${card.id}`}>
-                    {card.id} - {card.idUser} - {card.brand} - {card.expireAt}
-                </li>
-            );
-        });
+    // Init user data
+    sessionStorage.setItem("Users", JSON.stringify([...users, newUser]));
+    sessionStorage.setItem(
+      "Wallets",
+      JSON.stringify([
+        ...wallets,
+        {
+          id: walletId,
+          idUser: newUser.id,
+          balance: 0
+        }
+      ])
+    );
+    sessionStorage.setItem("Cards", JSON.stringify([]));
+    sessionStorage.setItem("History", JSON.stringify([]));
+  },
 
-        return cards;
-    },
+  getCreditCards: () => JSON.parse(sessionStorage.getItem("Cards")),
 
-    getCreditCardsOfUser : function(idUser){
-        var cardsOfUser = creditCards.map((card) => {
-            if(card.idUser === idUser){
-                return (
-                    <li key={`${card.id}`}>
-                        {card.id} - {card.idUser} - {card.brand} - {card.expireAt}
-                    </li>
-                );
-            } else {
-                return null;
-            }
-        });
+  getCreditCardByID: () => creditCardId => {
+    const creditCards = request.getCreditCards();
+    return (
+      creditCards && creditCards.find(c => c.id === parseInt(creditCardId))
+    );
+  },
 
-        return cardsOfUser;
-    }
-}
+  getCreditCardsOfUser: idUser => {
+    const creditCards = request.getCreditCards();
+    return (
+      creditCards && creditCards.filter(c => c.idUser === parseInt(idUser))
+    );
+  },
+
+  getWallets: () => JSON.parse(sessionStorage.getItem("Wallets")),
+
+  getWalletByID: walletId => {
+    const wallets = request.getWallets();
+    return wallets && wallets.find(w => w.id === parseInt(walletId));
+  },
+
+  getWalletOfUser: idUser => {
+    const wallets = request.getWallets();
+    return wallets && wallets.find(w => w.idUser === parseInt(idUser));
+  },
+
+  getHistory: () => JSON.parse(sessionStorage.getItem("History")),
+
+  getHistoryOfUser: idUser => {
+    const wallet = request.getWalletOfUser(idUser);
+    const history = request.getHistory();
+
+    return (
+      wallet &&
+      history &&
+      history.filter(
+        h => h.idWallet === wallet.id || h.idDebitedWallet === wallet.id
+      )
+    );
+  },
+
+  // Find a suitable ID for an array of object
+  IDAutoIncrement: array => {
+    const max =
+      array &&
+      array.length > 0 &&
+      Math.max.apply(Math, array.map(({ id }) => id));
+    return max ? max + 1 : 1;
+  }
+};
 
 export default request;

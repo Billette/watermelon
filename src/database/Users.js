@@ -1,4 +1,4 @@
-let userList = [
+const users = [
     {
         id: 1,
         firstName: 'Kevin',
@@ -26,4 +26,4 @@ let userList = [
     }
 ];
 
-export {userList};
+export {users};
