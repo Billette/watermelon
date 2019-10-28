@@ -88,9 +88,7 @@ class Subscribe extends Component {
             placeholder="Enter your email"
             onChange={e => this.setState({ email: e.target.value })}
           />
-          <label for="password" style={{ marginTop: 10, marginBottom: 10 }}>
-            Password:
-          </label>
+          <label for="password">Password:</label>
           <input
             required
             type="password"

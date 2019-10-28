@@ -8,7 +8,7 @@ class Router extends Component {
   };
 
   navigate = route => {
-    console.log("route", route);
+    //console.log("route", route);
     if (!["subscribe", "login"].includes(route)) {
       throw new Error("Route does not exist");
     }
