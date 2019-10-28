@@ -7,7 +7,9 @@ class AddCard extends Component {
     this.state = {
       newBrand: "",
       newLastFour: "",
-      newExpireAt: ""
+      newExpireAt: "",
+      errorNotFilled: "",
+
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -61,17 +63,20 @@ class AddCard extends Component {
       cards.push(newCard);
 
       sessionStorage.setItem(cardsKey, JSON.stringify(cards));
-    } else {
-      console.log("champs manquants");
-    }
-
-    // Reset the input text fields
-    this.setState({
+      
+      // Reset the input text fields
+      this.setState({
       newBrand: "",
       newLastFour: "",
       newExpireAt: "",
-      isToCreate: true
+      isToCreate: true,
+      errorNotFilled: "",
     });
+    } else {
+      this.setState({
+        errorNotFilled: "Champs manquants",
+      })
+    }
 
     //Inform the parent (MyCreditCards) to re-render
     var handleToUpdate = this.props.handleToUpdate;
@@ -79,6 +84,7 @@ class AddCard extends Component {
   }
 
   displayAddCard() {
+    var errorNotFilled = this.state.errorNotFilled;
     return (
       <div>
         Indiquer la marque: &ensp;
@@ -110,6 +116,7 @@ class AddCard extends Component {
         >
           <h7> Valider la saisie </h7>
         </button>
+        {errorNotFilled==="" ? null : <p style={{ color: "red" }}>{errorNotFilled}</p>}
         <br />
         <br></br>
       </div>
