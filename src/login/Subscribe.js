@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import request from "../database/Request";
+import Header from "../Component/Header";
 
 class Subscribe extends Component {
   state = {
@@ -43,6 +44,7 @@ class Subscribe extends Component {
 
     return (
       <div>
+        <Header />
         <h1>Subscribe To Watermelon</h1>
         <br />
         <form

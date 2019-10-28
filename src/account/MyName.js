@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import request from "../database/Request.js";
+import Header from "../Component/Header";
 
 class MyName extends Component {
-
   state = {
     newFirstName: "",
     newLastName: "",
     newEmail: "",
     newPassword: "",
-    errorNoModif: "",
+    errorNoModif: ""
   };
 
   handleChange = event => {
@@ -53,7 +53,9 @@ class MyName extends Component {
           {" "}
           <h4> Valider les changements </h4>{" "}
         </button>
-        {errorNoModif==="" ? null : <p style={{ color: "red" }}>{errorNoModif}</p>}
+        {errorNoModif === "" ? null : (
+          <p style={{ color: "red" }}>{errorNoModif}</p>
+        )}
         <br></br>
       </div>
     );
@@ -70,10 +72,10 @@ class MyName extends Component {
     //get the user to modify
     var userToModify = users.find(user => user.id === parseInt(idUser, 10));
 
-    let newFirstName= "";
-    let newLastName= "";
-    let newEmail= "";
-    let newPassword="";
+    let newFirstName = "";
+    let newLastName = "";
+    let newEmail = "";
+    let newPassword = "";
 
     // If all fields are empty, noting to modify
     if (
@@ -128,7 +130,7 @@ class MyName extends Component {
         newLastName: "",
         newEmail: "",
         newPassword: "",
-        errorNoModif: "",
+        errorNoModif: ""
       });
 
       //Inform the super-parent (MyAccount) to re-render
@@ -136,8 +138,8 @@ class MyName extends Component {
       handleToUpdate();
     } else {
       this.setState({
-        errorNoModif: "Rien à modifier",
-      })
+        errorNoModif: "Rien à modifier"
+      });
       //console.log("Rien à modifier");
     }
   };
@@ -149,6 +151,7 @@ class MyName extends Component {
     } = this.props;
     return (
       <div className="MyName">
+        <Header />
         <h2> Votre compte </h2>
         {firstName} {lastName} &emsp;-&emsp; {email}
         <br />

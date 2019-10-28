@@ -9,12 +9,22 @@ class Header extends Component {
           className="Header"
           style={{
             color: "white",
+            fontSize: "40px",
             backgroundColor: "black",
-            marginTop: "-22px",
+            marginTop: "-60px",
             display: "center"
           }}
         >
-          <h1>Watermelon</h1> <img src={logo192} alt="logo"/>
+          <h1
+            style={{
+              textAlign: "center",
+              verticalAlign: "middle",
+              Top: "50%"
+            }}
+          >
+            <img src={logo192} alt="logo" />
+            Watermelon
+          </h1>
         </div>
       </div>
     );
