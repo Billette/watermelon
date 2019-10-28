@@ -7,9 +7,9 @@ class AddCard extends Component {
         super(props);
         this.state = {
 
-            newBrand: '',
-            newLastFour: '',
-            newExpireAt: '',
+            newBrand: "",
+            newLastFour: "",
+            newExpireAt: "",
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -27,9 +27,9 @@ class AddCard extends Component {
 
         var isToCreate = true;
 
-        let newBrand = '';
-        let newLastFour = '';
-        let newExpireAt = '';
+        let newBrand = "";
+        let newLastFour = "";
+        let newExpireAt = "";
 
         // Check for empty text fields
         if(this.state.newBrand !== '') 
@@ -73,10 +73,9 @@ class AddCard extends Component {
 
         // Reset the input text fields
         this.setState({
-            newBrand: '',
-            newLastFour: '',
-            newExpireAt: '',
-            isToCreate: true,
+            newBrand: "",
+            newLastFour: "",
+            newExpireAt: "",
         });
 
         //Inform the parent (MyCreditCards) to re-render
