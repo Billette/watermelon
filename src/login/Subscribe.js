@@ -43,7 +43,7 @@ class Subscribe extends Component {
 
     return (
       <div>
-        <h1>Subscribe</h1>
+        <h1>Subscribe To Watermelon</h1>
         <br />
         <form
           style={{
@@ -59,38 +59,61 @@ class Subscribe extends Component {
             }
           }}
         >
-          <label for="firstName">First name:</label>
+          <label for="firstName" style={{ marginBottom: 10 }}>
+            First name:
+          </label>
           <input
             required
             name="firstName"
+            placeholder="Enter your first name"
             onChange={e => this.setState({ firstName: e.target.value })}
           />
-          <label for="lastName">Last name:</label>
+
+          <label for="lastName" style={{ marginTop: 10, marginBottom: 10 }}>
+            Last name:
+          </label>
           <input
             required
             name="lastName"
+            placeholder="Enter your last name"
             onChange={e => this.setState({ lastName: e.target.value })}
           />
-          <label for="email">Email:</label>
+          <label for="email" style={{ marginTop: 10, marginBottom: 10 }}>
+            Email:
+          </label>
           <input
             required
             type="email"
             name="email"
+            placeholder="Enter your email"
             onChange={e => this.setState({ email: e.target.value })}
           />
-          <label for="password">Password:</label>
+          <label for="password" style={{ marginTop: 10, marginBottom: 10 }}>
+            Password:
+          </label>
           <input
             required
             type="password"
             name="password"
+            placeholder="Enter a password"
             onChange={e => this.setState({ password: e.target.value })}
           />
-          <button type="submit">Subscribe</button>
+          <button
+            type="submit"
+            style={{ marginTop: 10, marginBottom: 10, borderRadius: "15px" }}
+          >
+            Subscribe
+          </button>
         </form>
         {error && <p style={{ color: "red" }}>{error}</p>}
         <p>
           Already got an account?
-          <button onClick={() => navigate("login")}>Login instead</button>
+          <button
+            onClick={() => navigate("login")}
+            style={{ marginLeft: 10, borderRadius: "15px" }}
+          >
+            Login instead
+          </button>
         </p>
       </div>
     );

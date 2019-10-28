@@ -19,7 +19,7 @@ class MyWallet extends Component {
     return (
       <div className="WalletInfo">
         <h2> Vos information de portefeuille </h2>
-        <h3>
+        <h3 style={{ marginLeft: 10 }}>
           ID: {id} &emsp; Montant: {balance}
         </h3>
       </div>
@@ -44,15 +44,16 @@ class MyWallet extends Component {
           name="amount"
           value={amount}
           onChange={this.handleChange}
+          style={{ marginLeft: 10, marginRight: "10px" }}
         />
         <br></br>
         <button
           onClick={() =>
             this.transfer(this.props.myWallet.id, idWalletDest, amount)
           }
+          style={{ borderRadius: "15px", marginTop: 10 }}
         >
-          {" "}
-          <h4> Valider le virement </h4>{" "}
+          Valider le virement
         </button>
         <p style={{ color: "red" }}>{error}</p>
         <br></br>

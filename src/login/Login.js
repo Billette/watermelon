@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import request from "../database/Request";
+import Header from "../Component/Header";
 
 class Login extends Component {
   state = {
@@ -35,6 +36,7 @@ class Login extends Component {
 
     return (
       <div>
+        <Header />
         <h1>Login</h1>
         <br />
         <form
@@ -45,22 +47,37 @@ class Login extends Component {
             alignItems: "center"
           }}
         >
-          <label for="email">Email:</label>
+          <label for="email" style={{ marginBottom: 10 }}>
+            Email:
+          </label>
           <input
             name="email"
+            placeholder="Enter your Email"
             onChange={e => this.setState({ email: e.target.value })}
           />
-          <label for="password">Password:</label>
+          <label for="password" style={{ marginTop: 10, marginBottom: 10 }}>
+            Password:
+          </label>
           <input
             name="password"
+            type="password"
+            placeholder="Enter your password"
             onChange={e => this.setState({ password: e.target.value })}
           />
         </form>
-        <button onClick={this.login}>Send</button>
+        <button
+          onClick={this.login}
+          style={{ marginTop: 10, borderRadius: "15px" }}
+        >
+          Send
+        </button>
         {error && <p style={{ color: "red" }}>{error}</p>}
         <p>
           New?{" "}
-          <button onClick={() => navigate("subscribe")}>
+          <button
+            onClick={() => navigate("subscribe")}
+            style={{ marginLeft: 10, borderRadius: "15px" }}
+          >
             Create an account
           </button>
         </p>

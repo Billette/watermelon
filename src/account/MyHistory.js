@@ -17,11 +17,10 @@ class MyHistory extends Component {
 
           return (
             <li key={transaction.id}>
-              {" "}
-              Vous avez transféré {transaction.amount}&nbsp; à{" "}
+              Vous avez transféré {transaction.amount}&nbsp; à
               {destUser.firstName} {destUser.lastName} (ID de portefeuille :
               &nbsp;
-              {destWallet.id}){" "}
+              {destWallet.id})
             </li>
           );
         } else if (transaction.idCreditedWallet === myWallet.id) {
@@ -33,25 +32,22 @@ class MyHistory extends Component {
 
           return (
             <li key={transaction.id}>
-              {" "}
-              Vous avez reçu {transaction.amount}&nbsp; de {srcUser.firstName}{" "}
+              Vous avez reçu {transaction.amount}&nbsp; de {srcUser.firstName}
               {srcUser.lastName} (ID de portefeuille : &nbsp;
-              {srcWallet.id}){" "}
+              {srcWallet.id})
             </li>
           );
         }
       } else if (transaction.type === "payin") {
         return (
           <li key={transaction.id}>
-            {" "}
-            Vous avez déposé {transaction.amount}&nbsp; sur votre portefeuille{" "}
+            Vous avez déposé {transaction.amount}&nbsp; sur votre portefeuille
           </li>
         );
       } else if (transaction.type === "payout") {
         return (
           <li key={transaction.id}>
-            {" "}
-            Vous avez retiré {transaction.amount}&nbsp; de votre portefeuille{" "}
+            Vous avez retiré {transaction.amount}&nbsp; de votre portefeuille
           </li>
         );
       } else {
@@ -66,7 +62,7 @@ class MyHistory extends Component {
 
   render() {
     return (
-      <div className="MyHistory">
+      <div className="MyHistory" style={{ marginBottom: "50px" }}>
         <h2> Votre historique de transaction </h2>
         {this.displayListHistory()}
       </div>

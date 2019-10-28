@@ -11,7 +11,12 @@ class MyName extends Component {
         <h2> Votre compte </h2>
         {firstName} {lastName} &emsp;-&emsp; {email}
         <br />
-        <button onClick={logout}>Se déconnecter</button>
+        <button
+          onClick={logout}
+          style={{ borderRadius: "15px", marginTop: 10 }}
+        >
+          Se déconnecter
+        </button>
       </div>
     );
   }

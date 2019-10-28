@@ -18,12 +18,14 @@ class MyCard extends Component {
     return (
       <div>
         <h3>------------------------------------------------- </h3>
-        <b> Marque : </b> {brand} &emsp;-&emsp; <b>4 derniers chiffres :</b>{" "}
+        <b> Marque : </b> {brand} &emsp;-&emsp; <b>4 derniers chiffres :</b>
         {lastFour}
         &emsp;-&emsp; <b> Expire le : </b> {expireAt} <br></br>
-        <button onClick={() => this.removeCard(id)}>
-          {" "}
-          <h4> Supprimer la carte </h4>{" "}
+        <button
+          onClick={() => this.removeCard(id)}
+          style={{ borderRadius: "15px", marginTop: 10, marginBottom: 10 }}
+        >
+          Supprimer la carte
         </button>
         {this.displayModify()} <br></br>
         {this.displayPay()}
@@ -35,32 +37,34 @@ class MyCard extends Component {
   displayModify = () => {
     return (
       <div>
-        Changer la marque: &ensp;{" "}
+        Changer la marque: &ensp;
         <input
           type="text"
           name="newBrand"
           value={this.state.newBrand}
           onChange={this.handleChange}
-        />{" "}
-        &ensp; Changer les 4 derniers chiffres: &ensp;{" "}
+        />
+        &ensp; Changer les 4 derniers chiffres: &ensp;
         <input
           type="text"
           name="newLastFour"
           value={this.state.newLastFour}
           onChange={this.handleChange}
-        />{" "}
-        &ensp; Changer la date d'expiration: &ensp;{" "}
+        />
+        &ensp; Changer la date d'expiration: &ensp;
         <input
           type="text"
           name="newExpireAt"
           value={this.state.newExpireAt}
           onChange={this.handleChange}
-        />{" "}
+        />
         &ensp;
         <br></br>
-        <button onClick={() => this.modifyCard(this.props.id)}>
-          {" "}
-          <h4> Valider les changements </h4>{" "}
+        <button
+          onClick={() => this.modifyCard(this.props.id)}
+          style={{ borderRadius: "15px", marginTop: 10 }}
+        >
+          Valider les changements
         </button>
         <br></br>
       </div>
@@ -70,7 +74,7 @@ class MyCard extends Component {
   displayPay = () => {
     return (
       <div>
-        Indiquer le montant: &ensp;{" "}
+        Indiquer le montant: &ensp;
         <input
           type="text"
           name="amount"
@@ -78,12 +82,20 @@ class MyCard extends Component {
           onChange={this.handleChange}
         />
         <br></br>
-        <button onClick={() => this.payin()}> Effectuer un dépôt </button>{" "}
-        <br></br>
-        <button onClick={() => this.payout()}>
+        <button
+          onClick={() => this.payin()}
+          style={{ borderRadius: "15px", marginTop: 10 }}
+        >
           {" "}
-          Effectuer un retrait{" "}
-        </button>{" "}
+          Effectuer un dépôt{" "}
+        </button>
+        <br></br>
+        <button
+          onClick={() => this.payout()}
+          style={{ borderRadius: "15px", marginTop: 10 }}
+        >
+          Effectuer un retrait
+        </button>
         <br></br>
         <br></br>
       </div>
